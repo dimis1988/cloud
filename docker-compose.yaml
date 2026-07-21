@@ -1,0 +1,29 @@
+version: '3'
+services:
+    ruby3.3:
+      image: ruby:3.3
+      container_name: ruby
+      working_dir: /app
+      volumes:
+       - .:/app
+      command: bash
+      stdin_open: true
+      tty: true
+      ports:  
+       - 3000:3000
+
+    postgresdb:
+      image: postgres:17
+      container_name: postgres
+      ports:
+       - 5432:5432
+      environment:
+       - POSTGRES_PASSWORD=password
+       - POSTGRES_USER=docker
+       - POSTGRES_DB=cloud_db
+      volumes:
+              - postgres-data:/var/lib/postgresql/data
+
+volumes:
+    postgres-data:
+      driver: local
