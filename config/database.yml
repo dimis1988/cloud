@@ -15,21 +15,17 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  host: postgresdb
+  port: 5432
+  username: docker
+  password: password
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 
 development:
   <<: *default
   database: cloud_db
-  username: docker
-  password: password
-  host: <%= ENV.fetch("DB_HOST", "postgresdb") %>
-  port: 5432
-
-
-
+  
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
   # When left blank, PostgreSQL will use the default role. This is
@@ -63,10 +59,7 @@ development:
 test:
   <<: *default
   database: cloud_db_test
-  username: docker
-  password: password
-  host: <%= ENV.fetch("DB_HOST", "postgresdb") %>
-  port: 5432
+
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -97,18 +90,18 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: app_production
-    username: app
-    password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+    database: cloud_db
+    username: docker
+    password: password
   cache:
     <<: *primary_production
-    database: app_production_cache
+    database: cloud_db_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: app_production_queue
+    database: cloud_db_cache
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: app_production_cable
+    database: cloud_db_cache
     migrations_paths: db/cable_migrate
